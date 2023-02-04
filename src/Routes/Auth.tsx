@@ -9,7 +9,9 @@ import { useState } from "react";
 import { auth } from "../firebase";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 
 const Auth = () => {
@@ -39,11 +41,25 @@ const Auth = () => {
       }
       console.log(data);
     } catch ({ code, message }) {
-      console.log(message);
+      setError(String(message));
+    }
+  };
+  const toggleAccount = () => setNewAccount((prev) => !prev);
+  const onSocialClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const name = (e.currentTarget as HTMLButtonElement).name;
+    let provider;
+    if (name === "googleAuth") {
+      provider = new GoogleAuthProvider();
+    } // add social login if I want
+    if (provider) {
+      provider.addScope("profile");
+      provider.addScope("email");
+      const result = await signInWithPopup(auth, provider);
     }
   };
   return (
     <div>
+      {error}
       <form onSubmit={onSubmit}>
         <input
           name="email"
@@ -63,8 +79,13 @@ const Auth = () => {
         />
         <input type="submit" value={newAccount ? "Create Account" : "Log in"} />
       </form>
+      <span onClick={toggleAccount}>
+        {newAccount ? "Sign in" : "Creact Account"}
+      </span>
       <div>
-        <button>Google</button>
+        <button name="googleAuth" onClick={onSocialClick}>
+          Google
+        </button>
       </div>
     </div>
   );

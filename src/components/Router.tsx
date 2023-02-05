@@ -7,16 +7,17 @@ import Nav from "./Nav";
 
 interface Props {
   isLoggedIn: boolean;
+  userObj: any;
 }
 
-const AppRouter = ({ isLoggedIn }: Props) => {
+const AppRouter = ({ isLoggedIn, userObj }: Props) => {
   return (
     <Router>
       {isLoggedIn && <Nav />}
       <Routes>
         {isLoggedIn ? (
           <>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home userObj={userObj} />} />
             <Route path="/Profile" element={<Profile />} />
           </>
         ) : (

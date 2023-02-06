@@ -14,11 +14,20 @@ function App() {
         setUserObj(user);
       } else {
         setIsLoggedIn(false);
+        setUserObj(null);
       }
       setInit(true);
     });
   }, []);
-  return <>{init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} /> : "Loading..."}</>;
+  return (
+    <>
+      {init ? (
+        <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} />
+      ) : (
+        "Loading..."
+      )}
+    </>
+  );
 }
 
 export default App;

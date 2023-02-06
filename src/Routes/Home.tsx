@@ -14,6 +14,7 @@ import {
   DocumentData,
   onSnapshot,
 } from "firebase/firestore";
+import Post from "./Post";
 
 interface Props {
   userObj: any;
@@ -67,11 +68,11 @@ const Home = ({ userObj }: Props) => {
       </form>
       <div>
         {posts.map((post) => (
-          <div>
-            <h4 key={post.id}>
-              {post.createdAt}:{post.text}
-            </h4>
-          </div>
+          <Post
+            key={post.id}
+            postObj={post}
+            isOwner={post.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>

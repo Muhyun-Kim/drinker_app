@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db, storage } from "../firebase";
 import {
   collection,
   doc,
@@ -14,6 +14,7 @@ import {
   DocumentData,
   onSnapshot,
 } from "firebase/firestore";
+import { getStorage, ref } from "firebase/storage";
 import Post from "./Post";
 
 interface Props {
@@ -23,7 +24,7 @@ interface Props {
 const Home = ({ userObj }: Props) => {
   const [post, setPost] = useState("");
   const [posts, setPosts] = useState<DocumentData[]>([]);
-
+  const [attachment, setAttachment] = useState();
   useEffect(() => {
     //firestroe databaseからdbをリアルタイムで持ってくる機能
     onSnapshot(collection(db, "post"), (snapshot) => {
@@ -38,12 +39,13 @@ const Home = ({ userObj }: Props) => {
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await addDoc(collection(db, "post"), {
-      text: post,
-      createdAt: Date.now(),
-      creatorId: userObj.uid,
-    });
-    setPost("");
+    const strageRef = ref(storage);
+    // await addDoc(collection(db, "post"), {
+    //   text: post,
+    //   createdAt: Date.now(),
+    //   creatorId: userObj.uid,
+    // });
+    // setPost("");
   };
 
   //ポスト内容を記入するための機能
@@ -53,7 +55,21 @@ const Home = ({ userObj }: Props) => {
     } = e;
     setPost(value);
   };
-  console.log(userObj);
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { files },
+    } = e;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      console.log(finishedEvent);
+      const result = (finishedEvent.currentTarget as any).result;
+      setAttachment(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+  const onClearAttachment = () => setAttachment(null);
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -64,7 +80,14 @@ const Home = ({ userObj }: Props) => {
           placeholder="what's on your mind?"
           maxLength={120}
         />
+        <input type="file" accept="image/*" onChange={onFileChange} />
         <input type="submit" value="Post" />
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" />
+            <button onClick={onClearAttachment}>clear photo</button>
+          </div>
+        )}
       </form>
       <div>
         {posts.map((post) => (

@@ -21,6 +21,7 @@ import {
   StorageReference,
 } from "firebase/storage";
 import Post from "./Post";
+import { url } from "inspector";
 
 interface Props {
   userObj: any;
@@ -46,18 +47,20 @@ const Home = ({ userObj }: Props) => {
     e.preventDefault();
     let attachmentURL = "";
     const attachmentRef = ref(storage, `${userObj.uid}/${Date.now()}`);
-    const response = await uploadString(
-      attachmentRef,
-      attachment,
-      "data_url"
-    ).then((snapshot) => {});
-
-    // await addDoc(collection(db, "post"), {
-    //   text: post,
-    //   createdAt: Date.now(),
-    //   creatorId: userObj.uid,
-    // });
-    // setPost("");
+    await uploadString(attachmentRef, attachment, "data_url");
+    attachmentURL = await getDownloadURL(attachmentRef);
+    const postObj = {
+      text: post,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
+      attachmentURL,
+    };
+    await addDoc(collection(db, "post"), {
+      postObj,
+    });
+    console.log(attachmentURL);
+    setPost("");
+    setAttachment(null);
   };
 
   //ポスト内容を記入するための機能
@@ -78,10 +81,10 @@ const Home = ({ userObj }: Props) => {
       setAttachment(result);
     };
     reader.readAsDataURL(theFile);
-    console.log(userObj.uid);
   };
   const onClearAttachment = () => setAttachment(null);
-
+  posts.map((post)=>{console.log(post.postObj.creatorId)})
+  console.log(userObj.uid)
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -105,8 +108,8 @@ const Home = ({ userObj }: Props) => {
         {posts.map((post) => (
           <Post
             key={post.id}
-            postObj={post}
-            isOwner={post.creatorId === userObj.uid}
+            postObj={post.postObj}
+            isOwner={post.postObj.postObj === userObj.uid}
           />
         ))}
       </div>

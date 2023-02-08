@@ -51,6 +51,7 @@ const Post = ({ postObj, isOwner }: Props) => {
         </>
       ) : (
         <>
+        {postObj.attachmentURL && <img src={postObj.attachmentURL} width="50px" />}
           <h4>
             {postObj.createdAt}:{postObj.text}
           </h4>

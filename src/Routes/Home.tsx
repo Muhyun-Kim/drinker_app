@@ -3,7 +3,6 @@
  * Modified : 2023/02/05
  * Function : ホーム画面
  */
-
 import React, { useEffect, useState } from "react";
 import { db, storage } from "../firebase";
 import {
@@ -14,7 +13,13 @@ import {
   DocumentData,
   onSnapshot,
 } from "firebase/firestore";
-import { getStorage, ref } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+  StorageReference,
+} from "firebase/storage";
 import Post from "./Post";
 
 interface Props {
@@ -39,7 +44,14 @@ const Home = ({ userObj }: Props) => {
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const strageRef = ref(storage);
+    let attachmentURL = "";
+    const attachmentRef = ref(storage, `${userObj.uid}/${Date.now()}`);
+    const response = await uploadString(
+      attachmentRef,
+      attachment,
+      "data_url"
+    ).then((snapshot) => {});
+
     // await addDoc(collection(db, "post"), {
     //   text: post,
     //   createdAt: Date.now(),
@@ -62,11 +74,11 @@ const Home = ({ userObj }: Props) => {
     const theFile = files[0];
     const reader = new FileReader();
     reader.onloadend = (finishedEvent) => {
-      console.log(finishedEvent);
       const result = (finishedEvent.currentTarget as any).result;
       setAttachment(result);
     };
     reader.readAsDataURL(theFile);
+    console.log(userObj.uid);
   };
   const onClearAttachment = () => setAttachment(null);
 

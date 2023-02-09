@@ -41,12 +41,12 @@ const Home = ({ userObj }: Props) => {
       setPosts(postArr);
     });
   }, []);
-
+  const attachmentRef = ref(storage, `${userObj.uid}`);
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let attachmentURL = "";
-    const attachmentRef = ref(storage, `${userObj.uid}/${Date.now()}`);
+
     await uploadString(attachmentRef, attachment, "data_url");
     attachmentURL = await getDownloadURL(attachmentRef);
     const postObj = {
@@ -58,7 +58,6 @@ const Home = ({ userObj }: Props) => {
     await addDoc(collection(db, "post"), {
       postObj,
     });
-    console.log(attachmentURL);
     setPost("");
     setAttachment(null);
   };
@@ -83,8 +82,10 @@ const Home = ({ userObj }: Props) => {
     reader.readAsDataURL(theFile);
   };
   const onClearAttachment = () => setAttachment(null);
-  posts.map((post)=>{console.log(post.postObj.creatorId)})
-  console.log(userObj.uid)
+  posts.map((post) => {
+    console.log(post.postObj.creatorId);
+  });
+  console.log("userObj.uid=", userObj.uid);
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -109,7 +110,8 @@ const Home = ({ userObj }: Props) => {
           <Post
             key={post.id}
             postObj={post.postObj}
-            isOwner={post.postObj.postObj === userObj.uid}
+            isOwner={post.postObj.creatorId === userObj.uid}
+            attachmentRef={attachmentRef}
           />
         ))}
       </div>

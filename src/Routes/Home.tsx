@@ -3,6 +3,7 @@
  * Modified : 2023/02/05
  * Function : ホーム画面
  */
+import { v4 as uuidv4 } from "uuid";
 import React, { useEffect, useState } from "react";
 import { db, storage } from "../firebase";
 import {
@@ -31,9 +32,10 @@ const Home = ({ userObj }: Props) => {
   const [post, setPost] = useState("");
   const [posts, setPosts] = useState<DocumentData[]>([]);
   const [attachment, setAttachment] = useState();
+  const postCollectionRef = collection(db, `post`)
   useEffect(() => {
     //firestroe databaseからdbをリアルタイムで持ってくる機能
-    onSnapshot(collection(db, "post"), (snapshot) => {
+    onSnapshot(postCollectionRef, (snapshot) => {
       const postArr = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -41,21 +43,21 @@ const Home = ({ userObj }: Props) => {
       setPosts(postArr);
     });
   }, []);
-  const attachmentRef = ref(storage, `${userObj.uid}`);
+
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let attachmentURL = "";
-
-    await uploadString(attachmentRef, attachment, "data_url");
-    attachmentURL = await getDownloadURL(attachmentRef);
+    const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
+    console.log(attachmentRef.fullPath)
+    const uploadAttachment = uploadString(attachmentRef, attachment, "data_url");
+    getDownloadURL(attachmentRef).then((url)=>{});
+    
     const postObj = {
       text: post,
       createdAt: Date.now(),
       creatorId: userObj.uid,
-      attachmentURL,
     };
-    await addDoc(collection(db, "post"), {
+    await addDoc(postCollectionRef, {
       postObj,
     });
     setPost("");
@@ -69,6 +71,8 @@ const Home = ({ userObj }: Props) => {
     } = e;
     setPost(value);
   };
+
+  //写真(ファイル)選択機能
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
@@ -82,10 +86,7 @@ const Home = ({ userObj }: Props) => {
     reader.readAsDataURL(theFile);
   };
   const onClearAttachment = () => setAttachment(null);
-  posts.map((post) => {
-    console.log(post.postObj.creatorId);
-  });
-  console.log("userObj.uid=", userObj.uid);
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -111,7 +112,6 @@ const Home = ({ userObj }: Props) => {
             key={post.id}
             postObj={post.postObj}
             isOwner={post.postObj.creatorId === userObj.uid}
-            attachmentRef={attachmentRef}
           />
         ))}
       </div>

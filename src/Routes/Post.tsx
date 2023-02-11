@@ -1,6 +1,6 @@
 import React from "react";
-import { doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { doc, deleteDoc, updateDoc, deleteField } from "firebase/firestore";
+import { db, storageRef } from "../firebase";
 import { useState } from "react";
 import { async } from "@firebase/util";
 import { getStorage, ref, deleteObject } from "firebase/storage";
@@ -8,25 +8,25 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 interface Props {
   postObj;
   isOwner: boolean;
+  postCollectionRef;
+  post;
 }
 
-const Post = ({ postObj, isOwner }: Props) => {
+const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
   const [editing, setEditing] = useState(false);
   const [newPost, setNewPost] = useState(postObj.text);
+  const postRef = doc(postCollectionRef, `${postObj.id}`);
+  //ポスト削除機能
   const onDeleteClick = async () => {
-    const ok = window.confirm("Are you sure delete?");
-    if (ok) {
-      console.log(postObj.id);
-      await deleteDoc(doc(db, "post", `${postObj}`));
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      await deleteDoc(doc(postCollectionRef, post));
     }
   };
   const toggleEditing = () => setEditing((prev) => !prev);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(postObj, newPost);
-    await updateDoc(doc(db, "post", `${postObj.id}`), {
-      text: newPost,
-    });
+    await deleteDoc
     setEditing(false);
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,9 +53,7 @@ const Post = ({ postObj, isOwner }: Props) => {
         </>
       ) : (
         <>
-          {/* {postObj.attachmentURL && (
-            <img src={postObj.attachmentURL} width="50px" />
-          )} */}
+          {postObj.img && <img src={postObj.img} width="50px" />}
           {postObj.text && (
             <h4>
               {postObj.createdAt}:{postObj.text}

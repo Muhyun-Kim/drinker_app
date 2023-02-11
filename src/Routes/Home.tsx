@@ -13,6 +13,7 @@ import {
   getDocs,
   DocumentData,
   onSnapshot,
+  setDoc,
 } from "firebase/firestore";
 import {
   getStorage,
@@ -20,9 +21,11 @@ import {
   uploadString,
   getDownloadURL,
   StorageReference,
+  getMetadata,
 } from "firebase/storage";
 import Post from "./Post";
 import { url } from "inspector";
+import { async } from "@firebase/util";
 
 interface Props {
   userObj: any;
@@ -31,8 +34,9 @@ interface Props {
 const Home = ({ userObj }: Props) => {
   const [post, setPost] = useState("");
   const [posts, setPosts] = useState<DocumentData[]>([]);
-  const [attachment, setAttachment] = useState();
-  const postCollectionRef = collection(db, `post`)
+  const [attachment, setAttachment] = useState("");
+
+  const postCollectionRef = collection(db, `post`);
   useEffect(() => {
     //firestroe databaseからdbをリアルタイムで持ってくる機能
     onSnapshot(postCollectionRef, (snapshot) => {
@@ -48,20 +52,21 @@ const Home = ({ userObj }: Props) => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
-    console.log(attachmentRef.fullPath)
-    const uploadAttachment = uploadString(attachmentRef, attachment, "data_url");
-    getDownloadURL(attachmentRef).then((url)=>{});
-    
-    const postObj = {
-      text: post,
-      createdAt: Date.now(),
-      creatorId: userObj.uid,
-    };
-    await addDoc(postCollectionRef, {
-      postObj,
-    });
-    setPost("");
-    setAttachment(null);
+    uploadString(attachmentRef, attachment, "data_url").then(() =>
+      getDownloadURL(attachmentRef).then((url) => {
+        const postObj = {
+          text: post,
+          createdAt: Date.now(),
+          creatorId: userObj.uid,
+          img: url,
+        };
+        addDoc(postCollectionRef, {
+            postObj,
+          });
+        setPost("");
+        setAttachment(null);
+      })
+    );
   };
 
   //ポスト内容を記入するための機能
@@ -86,7 +91,6 @@ const Home = ({ userObj }: Props) => {
     reader.readAsDataURL(theFile);
   };
   const onClearAttachment = () => setAttachment(null);
-
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -112,6 +116,8 @@ const Home = ({ userObj }: Props) => {
             key={post.id}
             postObj={post.postObj}
             isOwner={post.postObj.creatorId === userObj.uid}
+            postCollectionRef={postCollectionRef}
+            post={post.id}
           />
         ))}
       </div>

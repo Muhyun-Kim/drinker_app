@@ -1,6 +1,6 @@
 import React from "react";
 import { doc, deleteDoc, updateDoc, deleteField } from "firebase/firestore";
-import { db, storageRef } from "../firebase";
+import { db, storage, storageRef } from "../firebase";
 import { useState } from "react";
 import { async } from "@firebase/util";
 import { getStorage, ref, deleteObject } from "firebase/storage";
@@ -9,16 +9,24 @@ interface Props {
   postObj;
   isOwner: boolean;
   postCollectionRef;
+  attachmentRef;
   post;
 }
 
-const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
+const Post = ({
+  postObj,
+  isOwner,
+  postCollectionRef,
+  attachmentRef,
+  post,
+}: Props) => {
   const [editing, setEditing] = useState(false);
   const [newPost, setNewPost] = useState(postObj.text);
-  const postRef = doc(postCollectionRef, `${postObj.id}`);
   //ポスト削除機能
   const onDeleteClick = async () => {
+    const desertRef = ref(storage, postObj.img);
     if (window.confirm("Are you sure you want to delete this post?")) {
+      await deleteObject(desertRef);
       await deleteDoc(doc(postCollectionRef, post));
     }
   };
@@ -26,7 +34,7 @@ const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(postObj, newPost);
-    await deleteDoc
+    await deleteDoc;
     setEditing(false);
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

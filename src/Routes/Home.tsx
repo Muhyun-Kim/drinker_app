@@ -37,6 +37,7 @@ const Home = ({ userObj }: Props) => {
   const [attachment, setAttachment] = useState("");
 
   const postCollectionRef = collection(db, `post`);
+  const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
   useEffect(() => {
     //firestroe databaseからdbをリアルタイムで持ってくる機能
     onSnapshot(postCollectionRef, (snapshot) => {
@@ -50,23 +51,24 @@ const Home = ({ userObj }: Props) => {
 
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    let attachmentPath;
     e.preventDefault();
-    const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
-    uploadString(attachmentRef, attachment, "data_url").then(() =>
-      getDownloadURL(attachmentRef).then((url) => {
-        const postObj = {
-          text: post,
-          createdAt: Date.now(),
-          creatorId: userObj.uid,
-          img: url,
-        };
-        addDoc(postCollectionRef, {
-            postObj,
-          });
-        setPost("");
-        setAttachment(null);
-      })
+    attachmentPath = uploadString(attachmentRef, attachment, "data_url").then(
+      () => getDownloadURL(attachmentRef)
     );
+    attachmentPath.then((url) => {
+      const postObj = {
+        text: post,
+        createdAt: Date.now(),
+        creatorId: userObj.uid,
+        img: url,
+      };
+      addDoc(postCollectionRef, {
+        postObj,
+      });
+      setPost("");
+      setAttachment(null);
+    });
   };
 
   //ポスト内容を記入するための機能
@@ -117,6 +119,7 @@ const Home = ({ userObj }: Props) => {
             postObj={post.postObj}
             isOwner={post.postObj.creatorId === userObj.uid}
             postCollectionRef={postCollectionRef}
+            attachmentRef={attachmentRef}
             post={post.id}
           />
         ))}

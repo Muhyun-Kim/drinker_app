@@ -8,17 +8,18 @@ import Nav from "./Nav";
 interface Props {
   isLoggedIn: boolean;
   userObj: any;
+  refreshUser;
 }
 
-const AppRouter = ({ isLoggedIn, userObj }: Props) => {
+const AppRouter = ({ isLoggedIn, userObj, refreshUser }: Props) => {
   return (
     <Router>
-      {isLoggedIn && <Nav />}
+      {isLoggedIn && <Nav userObj={userObj} />}
       <Routes>
         {isLoggedIn ? (
           <>
             <Route path="/" element={<Home userObj={userObj} />} />
-            <Route path="/Profile" element={<Profile />} />
+            <Route path="/Profile" element={<Profile userObj={userObj} refreshUser={refreshUser} />} />
           </>
         ) : (
           <Route path="*" element={<Auth />} />

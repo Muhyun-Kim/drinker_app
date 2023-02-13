@@ -11,7 +11,7 @@ const Nav = ({userObj}) => {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/Profile">{userObj.reloadUserInfo.displayName}'s profile</Link>
+          <Link to="/Profile">{userObj.displayName}'s profile</Link>
         </li>
       </ul>
     </nav>

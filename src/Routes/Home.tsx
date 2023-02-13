@@ -26,16 +26,14 @@ import {
 import Post from "./Post";
 import { url } from "inspector";
 import { async } from "@firebase/util";
+import PostFactory from "../components/PostFactory";
 
 interface Props {
-  userObj: any;
+  userObj;
 }
 
 const Home = ({ userObj }: Props) => {
-  const [post, setPost] = useState("");
   const [posts, setPosts] = useState<DocumentData[]>([]);
-  const [attachment, setAttachment] = useState("");
-
   const postCollectionRef = collection(db, `post`);
   const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
   useEffect(() => {
@@ -49,69 +47,13 @@ const Home = ({ userObj }: Props) => {
     });
   }, []);
 
-  //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    let attachmentPath;
-    e.preventDefault();
-    attachmentPath = uploadString(attachmentRef, attachment, "data_url").then(
-      () => getDownloadURL(attachmentRef)
-    );
-    attachmentPath.then((url) => {
-      const postObj = {
-        text: post,
-        createdAt: Date.now(),
-        creatorId: userObj.uid,
-        img: url,
-      };
-      addDoc(postCollectionRef, {
-        postObj,
-      });
-      setPost("");
-      setAttachment(null);
-    });
-  };
-
-  //ポスト内容を記入するための機能
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { value },
-    } = e;
-    setPost(value);
-  };
-
-  //写真(ファイル)選択機能
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { files },
-    } = e;
-    const theFile = files[0];
-    const reader = new FileReader();
-    reader.onloadend = (finishedEvent) => {
-      const result = (finishedEvent.currentTarget as any).result;
-      setAttachment(result);
-    };
-    reader.readAsDataURL(theFile);
-  };
-  const onClearAttachment = () => setAttachment(null);
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <input
-          value={post}
-          onChange={onChange}
-          type="text"
-          placeholder="what's on your mind?"
-          maxLength={120}
-        />
-        <input type="file" accept="image/*" onChange={onFileChange} />
-        <input type="submit" value="Post" />
-        {attachment && (
-          <div>
-            <img src={attachment} width="50px" />
-            <button onClick={onClearAttachment}>clear photo</button>
-          </div>
-        )}
-      </form>
+      <PostFactory
+        userObj={userObj}
+        attachmentRef={attachmentRef}
+        postCollectionRef={postCollectionRef}
+      />
       <div>
         {posts.map((post) => (
           <Post

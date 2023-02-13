@@ -12,6 +12,7 @@ function App() {
       if (user) {
         setIsLoggedIn(true);
         setUserObj(user);
+        console.log(userObj)
       } else {
         setIsLoggedIn(false);
         setUserObj(null);
@@ -21,7 +22,7 @@ function App() {
   }, []);
   const refreshUser = () => {
     const user = auth.currentUser;
-    console.log(user);
+    setUserObj({...user});
   };
   return (
     <>

@@ -8,12 +8,13 @@ interface Props {
 }
 const Profile = ({ userObj, refreshUser }) => {
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  
+
   const onLogOutClick = () => {
     auth.signOut();
+    refreshUser();
   };
   const getMyPosts = async () => {
-    const posts = collection(db, "post");
+    collection(db, "post");
   };
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -22,15 +23,16 @@ const Profile = ({ userObj, refreshUser }) => {
     setNewDisplayName(value);
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await updateProfile(auth.currentUser, {
-      displayName: newDisplayName,
-    })
-    refreshUser();
+    if (userObj.displayName !== newDisplayName) {
+      await updateProfile(auth.currentUser, { displayName: newDisplayName });
+      refreshUser();
+    }
   };
+  console.log(userObj.photoURL);
   return (
     <>
       <div>profile</div>
+      <img src={userObj.photoURL} />
       <form onSubmit={onSubmit}>
         <input type="text" onChange={onChange} value={newDisplayName} />
         <input type="submit" value="Update Profile" />

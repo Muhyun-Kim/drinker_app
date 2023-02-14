@@ -4,6 +4,9 @@ import { db, storage, storageRef } from "../firebase";
 import { useState } from "react";
 import { async } from "@firebase/util";
 import { getStorage, ref, deleteObject } from "firebase/storage";
+import "../index.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan, faPencil } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   postObj;
@@ -13,13 +16,7 @@ interface Props {
   post;
 }
 
-const Post = ({
-  postObj,
-  isOwner,
-  postCollectionRef,
-  attachmentRef,
-  post,
-}: Props) => {
+const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
   const [editing, setEditing] = useState(false);
   const [newPost, setNewPost] = useState(postObj.text);
   //ポスト削除機能
@@ -33,7 +30,7 @@ const Post = ({
   const toggleEditing = () => setEditing((prev) => !prev);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(postObj, newPost);
+    console.log(postObj);
     await deleteDoc;
     setEditing(false);
   };
@@ -44,7 +41,7 @@ const Post = ({
     setNewPost(value);
   };
   return (
-    <div>
+    <div className="flex flex-col w-3/5">
       {editing ? (
         <>
           <form onSubmit={onSubmit}>
@@ -57,20 +54,23 @@ const Post = ({
             />
             <input type="submit" value="update post" />
           </form>
-          <button onClick={toggleEditing}>cancle</button>
+          <button onClick={toggleEditing}>取消</button>
         </>
       ) : (
         <>
-          {postObj.img && <img src={postObj.img} width="50px" />}
-          {postObj.text && (
-            <h4>
-              {postObj.createdAt}:{postObj.text}
-            </h4>
-          )}
+          {/** 投稿内容の表示画面 */}
+          {postObj.text && <h4 className="pl-1">{postObj.text}</h4>}
+          {postObj.img && <img className="mb-2" src={postObj.img} />}
           {isOwner && (
             <>
-              <button onClick={onDeleteClick}>delete</button>
-              <button onClick={toggleEditing}>edit</button>
+              <div className="flex justify-end items-center pr-1">
+                <FontAwesomeIcon
+                  icon={faTrashCan}
+                  className="mr-6"
+                  onClick={onDeleteClick}
+                />
+                <FontAwesomeIcon icon={faPencil} onClick={toggleEditing} />
+              </div>
             </>
           )}
         </>

@@ -1,17 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../index.css";
+import { faCocktail } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
-
-const Nav = ({userObj}) => {
+const Nav = ({ userObj }) => {
   return (
-    <nav>
-      <ul>
+    <nav className="flex justify-center mt-10 mb-4">
+      <ul className="flex">
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/" className="m-3">
+            <FontAwesomeIcon
+              icon={faCocktail}
+              size="xl"
+              style={{ color: "pink" }}
+            />
+          </Link>
         </li>
         <li>
-          <Link to="/Profile">{userObj.displayName}'s profile</Link>
+          <Link to="/Profile">{userObj.displayName}</Link>
         </li>
       </ul>
     </nav>

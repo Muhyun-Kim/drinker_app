@@ -62,16 +62,19 @@ const PostFactory = ({ userObj, attachmentRef, postCollectionRef }) => {
   const onClearAttachment = () => setAttachment(null);
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <form className="flex flex-col items-center" onSubmit={onSubmit}>
+        <div className="flex w-4/5 mb-2">
+          <input type="file" accept="image/*" onChange={onFileChange} />
+          <input type="submit" value="投稿" />
+        </div>
         <input
+          className="w-4/5 h-20 rounded-lg pl-1 text-black mb-8"
           value={post}
           onChange={onChange}
           type="text"
           placeholder="what's on your mind?"
           maxLength={120}
         />
-        <input type="file" accept="image/*" onChange={onFileChange} />
-        <input type="submit" value="Post" />
         {attachment && (
           <div>
             <img src={attachment} width="50px" />

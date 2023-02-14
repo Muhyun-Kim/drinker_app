@@ -11,10 +11,7 @@ import {
 import React, { useState } from "react";
 import { auth } from "../firebase";
 import "../index.css";
-import { faCheckSquare, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { faSquare } from "@fortawesome/free-regular-svg-icons";
 
-interface Props {}
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");

@@ -5,17 +5,12 @@
  */
 
 import React from "react";
-import { useState } from "react";
 import { auth } from "../firebase";
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import AuthForm from "../components/AuthForm";
-import { faCheckSquare, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { faSquare } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCocktail } from "@fortawesome/free-solid-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 const Auth = () => {
   const onSocialClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,7 +27,12 @@ const Auth = () => {
   };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
-      <FontAwesomeIcon icon="fa-sharp fa-solid fa-martini-glass" />
+      <FontAwesomeIcon
+        icon={faCocktail}
+        size="3x"
+        style={{ color: "pink" }}
+        className="mb-8"
+      />
       <AuthForm />
       <div>
         <button name="googleAuth" onClick={onSocialClick}>

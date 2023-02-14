@@ -54,7 +54,7 @@ const Home = ({ userObj }: Props) => {
         attachmentRef={attachmentRef}
         postCollectionRef={postCollectionRef}
       />
-      <div>
+      <div className="flex flex-col items-center">
         {posts.map((post) => (
           <Post
             key={post.id}

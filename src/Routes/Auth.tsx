@@ -1,6 +1,6 @@
 /**
  * Author : muhyun-kim
- * Modified : 2023/02/04
+ * Modified : 2023/02/13
  * Function : 認証機能
  */
 
@@ -14,11 +14,10 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import AuthForm from "../components/AuthForm";
+import { faCheckSquare, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSquare } from "@fortawesome/free-regular-svg-icons";
 
 const Auth = () => {
-  
-
-  
   const onSocialClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const name = (e.currentTarget as HTMLButtonElement).name;
     let provider;
@@ -32,9 +31,9 @@ const Auth = () => {
     }
   };
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center min-h-screen">
+      <FontAwesomeIcon icon="fa-sharp fa-solid fa-martini-glass" />
       <AuthForm />
-
       <div>
         <button name="googleAuth" onClick={onSocialClick}>
           Google

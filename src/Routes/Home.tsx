@@ -6,26 +6,9 @@
 import { v4 as uuidv4 } from "uuid";
 import React, { useEffect, useState } from "react";
 import { db, storage } from "../firebase";
-import {
-  collection,
-  doc,
-  addDoc,
-  getDocs,
-  DocumentData,
-  onSnapshot,
-  setDoc,
-} from "firebase/firestore";
-import {
-  getStorage,
-  ref,
-  uploadString,
-  getDownloadURL,
-  StorageReference,
-  getMetadata,
-} from "firebase/storage";
+import { collection, DocumentData, onSnapshot } from "firebase/firestore";
+import { ref } from "firebase/storage";
 import Post from "./Post";
-import { url } from "inspector";
-import { async } from "@firebase/util";
 import PostFactory from "../components/PostFactory";
 
 interface Props {

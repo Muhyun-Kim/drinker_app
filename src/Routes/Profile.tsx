@@ -30,15 +30,21 @@ const Profile = ({ userObj, refreshUser }) => {
   };
   console.log(userObj.photoURL);
   return (
-    <>
-      <div>profile</div>
-      <img src={userObj.photoURL} />
-      <form onSubmit={onSubmit}>
-        <input type="text" onChange={onChange} value={newDisplayName} />
-        <input type="submit" value="Update Profile" />
-      </form>
-      <button onClick={onLogOutClick}>Log Out</button>
-    </>
+    <div className="flex justify-center mt-12">
+      <img src={userObj.photoURL} className="" />
+      <div className="flex flex-col justify-between items-center">
+        <form onSubmit={onSubmit} className="w-4/5 flex flex-col">
+          <input
+            className=" text-center text-black"
+            type="text"
+            onChange={onChange}
+            value={newDisplayName}
+          />
+          <input type="submit" value="Update" />
+        </form>
+        <button onClick={onLogOutClick}>Log Out</button>
+      </div>
+    </div>
   );
 };
 

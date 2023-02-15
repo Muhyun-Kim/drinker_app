@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/drinker_app/static/css/main.b1d654a6.css",
-    "main.js": "/drinker_app/static/js/main.037bbc15.js",
+    "main.css": "/drinker_app/static/css/main.ea5b2fb0.css",
+    "main.js": "/drinker_app/static/js/main.ce878a61.js",
     "static/js/787.2edd9892.chunk.js": "/drinker_app/static/js/787.2edd9892.chunk.js",
     "index.html": "/drinker_app/index.html",
-    "main.b1d654a6.css.map": "/drinker_app/static/css/main.b1d654a6.css.map",
-    "main.037bbc15.js.map": "/drinker_app/static/js/main.037bbc15.js.map",
+    "main.ea5b2fb0.css.map": "/drinker_app/static/css/main.ea5b2fb0.css.map",
+    "main.ce878a61.js.map": "/drinker_app/static/js/main.ce878a61.js.map",
     "787.2edd9892.chunk.js.map": "/drinker_app/static/js/787.2edd9892.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b1d654a6.css",
-    "static/js/main.037bbc15.js"
+    "static/css/main.ea5b2fb0.css",
+    "static/js/main.ce878a61.js"
   ]
 }

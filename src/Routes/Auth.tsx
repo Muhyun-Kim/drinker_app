@@ -36,7 +36,11 @@ const Auth = () => {
       <AuthForm />
       <div>
         <button name="googleAuth" onClick={onSocialClick}>
-          Google
+          Google<FontAwesomeIcon
+        icon={faGoogle}
+        style={{ color: "pink" }}
+        className="ml-2"
+      />
         </button>
       </div>
     </div>

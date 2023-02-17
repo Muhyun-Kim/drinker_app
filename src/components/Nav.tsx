@@ -6,14 +6,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Nav = ({ userObj }) => {
   return (
-    <nav className="flex justify-center mt-10 mb-4">
+    <nav className="flex justify-center mt-10 mb-4 text-slate-50">
       <ul className="flex">
         <li>
           <Link to="/" className="m-3">
             <FontAwesomeIcon
               icon={faCocktail}
               size="xl"
-              style={{ color: "pink" }}
+              className="text-fuchsia-400"
             />
           </Link>
         </li>

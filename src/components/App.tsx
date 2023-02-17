@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AppRouter from "./Router";
 import { auth } from "../firebase";
 import { onAuthStateChanged, updateProfile } from "firebase/auth";
+import Loading from "./Loading";
 import "../index.css";
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
             refreshUser={refreshUser}
           />
         ) : (
-          "Loading..."
+          <Loading />
         )}
     </>
   );

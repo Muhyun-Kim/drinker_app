@@ -8,34 +8,39 @@ import { getDownloadURL, uploadString } from "firebase/storage";
 import React, { useState } from "react";
 
 interface Props {
-  userObj;
-  attachmentRef;
-  postCollectionRef;
+  userObj: object;
+  attachmentRef: any;
+  postCollectionRef: any;
 }
 
 const PostFactory = ({ userObj, attachmentRef, postCollectionRef }) => {
   const [post, setPost] = useState("");
   const [attachment, setAttachment] = useState("");
+
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    let attachmentPath;
+    let attachmentPath: Promise<any>;
     e.preventDefault();
-    attachmentPath = uploadString(attachmentRef, attachment, "data_url").then(
-      () => getDownloadURL(attachmentRef)
-    );
-    attachmentPath.then((url) => {
-      const postObj = {
-        text: post,
-        createdAt: Date.now(),
-        creatorId: userObj.uid,
-        img: url,
-      };
-      addDoc(postCollectionRef, {
-        postObj,
+    if (attachment != "") {
+      attachmentPath = uploadString(attachmentRef, attachment, "data_url").then(
+        () => getDownloadURL(attachmentRef)
+      );
+      attachmentPath.then((url) => {
+        const postObj = {
+          text: post,
+          createdAt: Date.now(),
+          creatorId: userObj.uid,
+          img: url,
+        };
+        addDoc(postCollectionRef, {
+          postObj,
+        });
+        setPost("");
+        setAttachment(null);
       });
-      setPost("");
-      setAttachment(null);
-    });
+    } else {
+      alert("写真を選択してください");
+    }
   };
 
   //ポスト内容を記入するための機能
@@ -64,15 +69,15 @@ const PostFactory = ({ userObj, attachmentRef, postCollectionRef }) => {
     <>
       <form className="flex flex-col items-center" onSubmit={onSubmit}>
         <div className="flex w-4/5 mb-2">
-          <input type="file" accept="image/*" onChange={onFileChange} />
-          <input type="submit" value="投稿" />
+          <input type="file" accept="image/*" onChange={onFileChange} className="text-slate-50" />
+          <input type="submit" value="投稿" className="text-slate-50" />
         </div>
         <input
           className="w-4/5 h-20 rounded-lg pl-1 text-black mb-8"
           value={post}
           onChange={onChange}
           type="text"
-          placeholder="what's on your mind?"
+          placeholder="テキスト入力"
           maxLength={120}
         />
         {attachment && (

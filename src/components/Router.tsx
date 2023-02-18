@@ -1,6 +1,7 @@
 import React from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import Auth from "../Routes/Auth";
+import CreatePost from "../Routes/CreatePost";
 import Home from "../Routes/Home";
 import Profile from "../Routes/Profile";
 import Nav from "./Nav";
@@ -23,6 +24,7 @@ const AppRouter = ({ isLoggedIn, userObj, refreshUser }: Props) => {
               path="/Profile"
               element={<Profile userObj={userObj} refreshUser={refreshUser} />}
             />
+            <Route path="/Post" element={<CreatePost userObj={userObj} />}/>
           </>
         ) : (
           <Route path="*" element={<Auth />} />

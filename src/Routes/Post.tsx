@@ -1,9 +1,8 @@
 import React from "react";
 import { doc, deleteDoc, updateDoc, deleteField } from "firebase/firestore";
-import { db, storage, storageRef } from "../firebase";
+import { storage } from "../firebase";
 import { useState } from "react";
-import { async } from "@firebase/util";
-import { getStorage, ref, deleteObject } from "firebase/storage";
+import { ref, deleteObject } from "firebase/storage";
 import "../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPencil } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +11,6 @@ interface Props {
   postObj;
   isOwner: boolean;
   postCollectionRef;
-  attachmentRef;
   post;
 }
 
@@ -27,6 +25,7 @@ const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
       await deleteDoc(doc(postCollectionRef, post));
     }
   };
+
   const toggleEditing = () => setEditing((prev) => !prev);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +45,7 @@ const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
         <>
           <form onSubmit={onSubmit}>
             <input
+            className="text-black"
               type="text"
               placeholder="edit your post"
               value={newPost}
@@ -66,7 +66,7 @@ const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
               <div className="flex justify-end items-center pr-1">
                 <FontAwesomeIcon
                   icon={faTrashCan}
-                  className="mr-6"
+                  className="mr-6 text-slate-50"
                   onClick={onDeleteClick}
                 />
                 <FontAwesomeIcon icon={faPencil} onClick={toggleEditing} />

@@ -9,7 +9,8 @@ import { db, storage } from "../firebase";
 import { collection, DocumentData, onSnapshot } from "firebase/firestore";
 import { ref } from "firebase/storage";
 import Post from "./Post";
-import PostFactory from "../components/PostFactory";
+import PostFactory from "./CreatePost";
+import { Link } from "react-router-dom";
 
 interface Props {
   userObj;
@@ -32,19 +33,24 @@ const Home = ({ userObj }: Props) => {
 
   return (
     <div>
-      <PostFactory
+      {/* <PostFactory
         userObj={userObj}
         attachmentRef={attachmentRef}
         postCollectionRef={postCollectionRef}
-      />
+      /> */}
       <div className="flex flex-col items-center">
+        <Link
+          to=""
+          className="w-4/5 h-20 rounded-lg bg-white pl-1 text-neutral-400 mb-8"
+        >
+          テキスト入力
+        </Link>
         {posts.map((post) => (
           <Post
             key={post.id}
             postObj={post.postObj}
             isOwner={post.postObj.creatorId === userObj.uid}
             postCollectionRef={postCollectionRef}
-            attachmentRef={attachmentRef}
             post={post.id}
           />
         ))}

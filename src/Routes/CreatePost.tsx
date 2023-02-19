@@ -13,7 +13,7 @@ interface Props {
   postCollectionRef: any;
 }
 
-const PostFactory = ({ userObj, attachmentRef, postCollectionRef }) => {
+const CreatePost = ({ userObj, attachmentRef, postCollectionRef }) => {
   const [post, setPost] = useState("");
   const [attachment, setAttachment] = useState("");
 
@@ -91,4 +91,4 @@ const PostFactory = ({ userObj, attachmentRef, postCollectionRef }) => {
   );
 };
 
-export default PostFactory;
+export default CreatePost;

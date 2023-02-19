@@ -24,6 +24,7 @@ const AppRouter = ({ isLoggedIn, userObj, refreshUser }: Props) => {
               path="/Profile"
               element={<Profile userObj={userObj} refreshUser={refreshUser} />}
             />
+            <Route path="/Post" element={<CreatePost userObj={userObj} />}/>
           </>
         ) : (
           <Route path="*" element={<Auth />} />

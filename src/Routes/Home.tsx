@@ -10,16 +10,19 @@ import { collection, DocumentData, onSnapshot } from "firebase/firestore";
 import { ref } from "firebase/storage";
 import Post from "./Post";
 import PostFactory from "./CreatePost";
-import { Link } from "react-router-dom";
+import { BrowserRouter, Link, Router, Route, Routes } from "react-router-dom";
+import CreatePost from "./CreatePost";
+import path from "path";
 
 interface Props {
   userObj;
+  postCollectionRef;
+  attachmentRef;
 }
 
-const Home = ({ userObj }: Props) => {
+const Home = ({ userObj, postCollectionRef, attachmentRef }: Props) => {
   const [posts, setPosts] = useState<DocumentData[]>([]);
-  const postCollectionRef = collection(db, `post`);
-  const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
+
   useEffect(() => {
     //firestroe databaseからdbをリアルタイムで持ってくる機能
     onSnapshot(postCollectionRef, (snapshot) => {
@@ -33,14 +36,9 @@ const Home = ({ userObj }: Props) => {
 
   return (
     <div>
-      {/* <PostFactory
-        userObj={userObj}
-        attachmentRef={attachmentRef}
-        postCollectionRef={postCollectionRef}
-      /> */}
       <div className="flex flex-col items-center">
         <Link
-          to=""
+          to="/CreatePost"
           className="w-4/5 h-20 rounded-lg bg-white pl-1 text-neutral-400 mb-8"
         >
           テキスト入力
@@ -55,6 +53,7 @@ const Home = ({ userObj }: Props) => {
           />
         ))}
       </div>
+        
     </div>
   );
 };

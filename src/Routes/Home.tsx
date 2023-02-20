@@ -3,26 +3,24 @@
  * Modified : 2023/02/05
  * Function : ホーム画面
  */
-import { v4 as uuidv4 } from "uuid";
 import React, { useEffect, useState } from "react";
-import { db, storage } from "../firebase";
 import { collection, DocumentData, onSnapshot } from "firebase/firestore";
-import { ref } from "firebase/storage";
 import Post from "./Post";
-import PostFactory from "./CreatePost";
-import { BrowserRouter, Link, Router, Route, Routes } from "react-router-dom";
-import CreatePost from "./CreatePost";
-import path from "path";
+import { Link } from "react-router-dom";
+import { db, storage } from "../firebase";
+import { ref } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+
 
 interface Props {
   userObj;
-  postCollectionRef;
-  attachmentRef;
 }
 
-const Home = ({ userObj, postCollectionRef, attachmentRef }: Props) => {
+const Home = ({ userObj  }: Props) => {
   const [posts, setPosts] = useState<DocumentData[]>([]);
 
+  const postCollectionRef = collection(db, `post`);
+  const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
   useEffect(() => {
     //firestroe databaseからdbをリアルタイムで持ってくる機能
     onSnapshot(postCollectionRef, (snapshot) => {
@@ -53,7 +51,6 @@ const Home = ({ userObj, postCollectionRef, attachmentRef }: Props) => {
           />
         ))}
       </div>
-        
     </div>
   );
 };

@@ -22,8 +22,6 @@ interface Props {
 }
 
 const AppRouter = ({ isLoggedIn, userObj, refreshUser }: Props) => {
-  const postCollectionRef = collection(db, `post`);
-  const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
   return (
     <BrowserRouter>
       {isLoggedIn && <Nav userObj={userObj} />}
@@ -35,24 +33,12 @@ const AppRouter = ({ isLoggedIn, userObj, refreshUser }: Props) => {
               element={
                 <Home
                   userObj={userObj}
-                  postCollectionRef={postCollectionRef}
-                  attachmentRef={attachmentRef}
                 />
               }
             />
             <Route
               path="/Profile"
               element={<Profile userObj={userObj} refreshUser={refreshUser} />}
-            />
-            <Route
-              path="/CreatePost"
-              element={
-                <CreatePost
-                  userObj={userObj}
-                  attachmentRef={attachmentRef}
-                  postCollectionRef={postCollectionRef}
-                />
-              }
             />
           </>
         ) : (

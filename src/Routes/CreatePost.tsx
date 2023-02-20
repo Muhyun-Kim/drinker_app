@@ -3,9 +3,13 @@
  * Modified : 2023/02/13
  * Function : ポスト作成
  */
+
 import { addDoc } from "firebase/firestore";
 import { getDownloadURL, uploadString } from "firebase/storage";
 import React, { useState } from "react";
+import { faImage, faBan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   userObj: object;
@@ -16,6 +20,7 @@ interface Props {
 const CreatePost = ({ userObj, attachmentRef, postCollectionRef }) => {
   const [post, setPost] = useState("");
   const [attachment, setAttachment] = useState("");
+  const navigate = useNavigate();
 
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,6 +42,7 @@ const CreatePost = ({ userObj, attachmentRef, postCollectionRef }) => {
         });
         setPost("");
         setAttachment(null);
+        navigate("/");
       });
     } else {
       alert("写真を選択してください");
@@ -64,13 +70,24 @@ const CreatePost = ({ userObj, attachmentRef, postCollectionRef }) => {
     };
     reader.readAsDataURL(theFile);
   };
-  const onClearAttachment = () => setAttachment(null);
+  const onClearAttachment = () => {
+    setAttachment(null);
+  };
+  const imgIcon = <FontAwesomeIcon icon={faImage} />;
   return (
     <>
       <form className="flex flex-col items-center" onSubmit={onSubmit}>
-        <div className="flex w-4/5 mb-2">
-          <input type="file" accept="image/*" onChange={onFileChange} className="text-slate-50" />
-          <input type="submit" value="投稿" className="text-slate-50" />
+        <div className="flex w-4/5 mb-2 px-4 justify-between">
+          <label>
+            {imgIcon}
+            <input
+              className="hidden"
+              type="file"
+              accept="image/*"
+              onChange={onFileChange}
+            />
+          </label>
+          <input type="submit" value="投稿" />
         </div>
         <input
           className="w-4/5 h-20 rounded-lg pl-1 text-black mb-8"
@@ -81,9 +98,11 @@ const CreatePost = ({ userObj, attachmentRef, postCollectionRef }) => {
           maxLength={120}
         />
         {attachment && (
-          <div>
-            <img src={attachment} width="50px" />
-            <button onClick={onClearAttachment}>clear photo</button>
+          <div className="flex flex-col items-center w-4/6">
+            <img src={attachment} className="mb-4" />
+            <button onClick={onClearAttachment} className="self-end">
+              <FontAwesomeIcon icon={faBan} />
+            </button>
           </div>
         )}
       </form>

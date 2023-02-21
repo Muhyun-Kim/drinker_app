@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import AppRouter from "./Router";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import Loading from "./Loading";
 import "../index.css";
+import { collection } from "firebase/firestore";
 
 function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(auth.currentUser ? true : false);
   const [userObj, setUserObj] = useState(null);
+  const postCollectionRef = collection(db, `post`);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -33,6 +35,7 @@ function App() {
             isLoggedIn={isLoggedIn}
             userObj={userObj}
             refreshUser={refreshUser}
+            postCollectionRef={postCollectionRef}
           />
         ) : (
           <Loading />

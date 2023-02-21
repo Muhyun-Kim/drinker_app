@@ -5,22 +5,26 @@
  */
 
 import { addDoc } from "firebase/firestore";
-import { getDownloadURL, uploadString } from "firebase/storage";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import React, { useState } from "react";
 import { faImage, faBan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { storage } from "../firebase";
+import { v4 as uuidv4 } from "uuid";
+import { Transition, CSSTransition } from 'react-transition-group';
 
 interface Props {
   userObj: object;
-  attachmentRef: any;
   postCollectionRef: any;
 }
 
-const CreatePost = ({ userObj, attachmentRef, postCollectionRef }) => {
+const CreatePost = ({ userObj, postCollectionRef }) => {
   const [post, setPost] = useState("");
   const [attachment, setAttachment] = useState("");
   const navigate = useNavigate();
+
+  const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
 
   //ポスト内容の送信ボタン機能、ポスト内容をdbに保存し、書いた内容を空にする。
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

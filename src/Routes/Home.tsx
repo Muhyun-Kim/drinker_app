@@ -6,21 +6,19 @@
 import React, { useEffect, useState } from "react";
 import { collection, DocumentData, onSnapshot } from "firebase/firestore";
 import Post from "./Post";
-import { Link } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { db, storage } from "../firebase";
 import { ref } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
-
+import CreatePost from "./CreatePost";
 
 interface Props {
   userObj;
+  postCollectionRef;
 }
 
-const Home = ({ userObj  }: Props) => {
+const Home = ({ userObj, postCollectionRef }: Props) => {
   const [posts, setPosts] = useState<DocumentData[]>([]);
 
-  const postCollectionRef = collection(db, `post`);
-  const attachmentRef = ref(storage, `${userObj.uid}/${uuidv4()}`);
   useEffect(() => {
     //firestroe databaseからdbをリアルタイムで持ってくる機能
     onSnapshot(postCollectionRef, (snapshot) => {

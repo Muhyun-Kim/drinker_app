@@ -28,7 +28,6 @@ const Profile = ({ userObj, refreshUser }) => {
       refreshUser();
     }
   };
-  console.log(userObj.photoURL);
   return (
     <div className="flex justify-center mt-12">
       <img src={userObj.photoURL} className="" />

@@ -29,7 +29,6 @@ const Post = ({ postObj, isOwner, postCollectionRef, post }: Props) => {
   const toggleEditing = () => setEditing((prev) => !prev);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(postObj);
     await deleteDoc;
     setEditing(false);
   };

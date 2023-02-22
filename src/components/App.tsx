@@ -5,6 +5,7 @@ import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import Loading from "./Loading";
 import "../index.css";
 import { collection } from "firebase/firestore";
+import { useLocation } from "react-router-dom";
 
 function App() {
   const [init, setInit] = useState(false);
@@ -16,7 +17,6 @@ function App() {
       if (user) {
         setIsLoggedIn(true);
         setUserObj(user);
-        console.log(userObj);
       } else {
         setIsLoggedIn(false);
         setUserObj(null);

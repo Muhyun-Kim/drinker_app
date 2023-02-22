@@ -1,12 +1,8 @@
-import {
-  BrowserRouter,
-  HashRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Auth from "../Routes/Auth";
 import CreatePost from "../Routes/CreatePost";
 import Home from "../Routes/Home";
+import AnimatedRouters from "./AnimatedRouters";
 import Profile from "../Routes/Profile";
 import Nav from "./Nav";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -28,33 +24,12 @@ const AppRouter = ({
   return (
     <BrowserRouter>
       {isLoggedIn && <Nav userObj={userObj} />}
-      <Routes>
-        {isLoggedIn ? (
-          <>
-            <Route
-              path="/"
-              element={
-                <Home userObj={userObj} postCollectionRef={postCollectionRef} />
-              }
-            />
-            <Route
-              path="/Profile"
-              element={<Profile userObj={userObj} refreshUser={refreshUser} />}
-            />
-            <Route
-              path="/CreatePost"
-              element={
-                <CreatePost
-                  userObj={userObj}
-                  postCollectionRef={postCollectionRef}
-                />
-              }
-            />
-          </>
-        ) : (
-          <Route path="*" element={<Auth />} />
-        )}
-      </Routes>
+      <AnimatedRouters
+        isLoggedIn={isLoggedIn}
+        userObj={userObj}
+        refreshUser={refreshUser}
+        postCollectionRef={postCollectionRef}
+      />
     </BrowserRouter>
   );
 };

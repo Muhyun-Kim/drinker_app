@@ -34,11 +34,9 @@ const AuthForm = () => {
       let data;
       if (newAccount) {
         data = await createUserWithEmailAndPassword(auth, email, password);
-        console.log(data);
       } else {
         data = await signInWithEmailAndPassword(auth, email, password);
       }
-      console.log(data);
     } catch ({ code, message }) {
       setError(`パスワードが間違っているか存在しないアカウントです。`);
     }

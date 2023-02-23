@@ -16,6 +16,16 @@ body {
   color: white;
 }
 
+.authInput {
+  width: 100%;
+  padding: 10px;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 1);
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: black;
+}
+
 .fade-enter {
   opacity: 0;
   transform: translate(0, 25px);

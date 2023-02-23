@@ -28,9 +28,10 @@ const Profile = ({ userObj, refreshUser }) => {
       refreshUser();
     }
   };
+  console.log(userObj)
   return (
     <div className="flex justify-center mt-12">
-      <img src={userObj.photoURL} className="" />
+      <img src={userObj.photoURL} className="w-20" />
       <div className="flex flex-col justify-between items-center">
         <form onSubmit={onSubmit} className="w-4/5 flex flex-col">
           <input

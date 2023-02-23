@@ -42,15 +42,15 @@ function AnimatedRouters({
                   <Profile userObj={userObj} refreshUser={refreshUser} />
                 }
               />
-              <Route
-                path="/CreatePost"
-                element={
-                  <CreatePost
-                    userObj={userObj}
-                    postCollectionRef={postCollectionRef}
-                  />
-                }
-              />
+                <Route
+                  path="/CreatePost"
+                  element={
+                    <CreatePost
+                      userObj={userObj}
+                      postCollectionRef={postCollectionRef}
+                    />
+                  }
+                />
             </>
           ) : (
             <Route path="*" element={<Auth />} />
